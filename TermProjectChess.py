@@ -1,14 +1,3 @@
-# By submitting this assignment, I agree to the following:
-#   "Aggies do not lie, cheat, or steal, or tolerate those who do."
-#   "I have not given or received any unauthorized aid on this assignment."
-#
-# Name:         Andrew Lee
-#               Johnson Pham
-# Section:      engr-102-432
-# Assignment:   Lab7a_Act3
-# Date:         8 October 2020
-# Topic:        Basic Chess simulator w/ nested lists
-
 # INTRO
 print("----WELCOME TO THE GAME OF FFA CHESS. YOU CONTROL EVERYTHING AND PIECES CAN MOVE WHEREVER AND HOWEVER YOU WANT!"
       "----\n---------- ENJOY!! ---------- \n")
