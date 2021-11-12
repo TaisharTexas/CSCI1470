@@ -3,19 +3,19 @@ print("----WELCOME TO THE GAME OF FFA CHESS. YOU CONTROL EVERYTHING AND PIECES C
       "----\n---------- ENJOY!! ---------- \n")
 # SIMULATION INSTRUCTIONS
 print(" Valid coordinate inputs range from 1-8 for each axis. \n The X-axis are the rows on the board, "
-      "the Y-axis are the columns on the board. \n If you wish to stop the game, type 'STOP' all caps into either move "
-      "input query.")
+      "the Y-axis are the columns on the board. \n If you wish to stop the game, type 'STOP' into either move input "
+      "query.")
 
 # The chess board in its starting state
-# x-axis:      A         B            C          D          E          F          G          H ||  # y-axis
-board = [[chr(9814), chr(9816), chr(9815), chr(9813), chr(9812), chr(9815), chr(9816), chr(9814)], # 1
-         [chr(9817), chr(9817), chr(9817), chr(9817), chr(9817), chr(9817), chr(9817), chr(9817)], # 2
-         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 3
-         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 4
-         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 5
-         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 6
-         [chr(9823), chr(9823), chr(9823), chr(9823), chr(9823), chr(9823), chr(9823), chr(9823)], # 7
-         [chr(9820), chr(9822), chr(9821), chr(9819), chr(9818), chr(9821), chr(9822), chr(9820)]] # 8
+# x-axis: A(1 -> 0)  B(2 -> 1)  C(3 -> 2)  D(4 -> 3)  E(5 -> 4)  F(6 -> 5)  G(7 -> 6)  H(8 -> 7) ||# y-axis
+board = [[chr(9814), chr(9816), chr(9815), chr(9813), chr(9812), chr(9815), chr(9816), chr(9814)], # 1 -> 0
+         [chr(9817), chr(9817), chr(9817), chr(9817), chr(9817), chr(9817), chr(9817), chr(9817)], # 2 -> 1
+         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 3 -> 2
+         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 4 -> 3
+         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 5 -> 4
+         [    ".",       ".",       ".",       ".",       ".",       ".",       ".",       "."],   # 6 -> 5
+         [chr(9823), chr(9823), chr(9823), chr(9823), chr(9823), chr(9823), chr(9823), chr(9823)], # 7 -> 6
+         [chr(9820), chr(9822), chr(9821), chr(9819), chr(9818), chr(9821), chr(9822), chr(9820)]] # 8 -> 7
 
 gameStatus = "GO"  # A flag that indicates to the while loop whether or not to continue running the game
 didIError = False
@@ -49,38 +49,60 @@ def convertLetterToNum(letter):
         return 0
 
 def isClearDirect(startingPt, endingPt):
-    isWayClear = False
+    isWayClear = True
     # Need to find axis of movement
     if(startingPt[0] == endingPt[0]):
         # no x change, piece is moving on y-axis
+        print("no x change, y axis movement")
         xAxis = startingPt[0]
-        if startingPt[1] < endingPt[1]:
+        print("startingPt (x,y): ({},{})".format(startingPt[0], startingPt[1]))
+        print("endingPt (x,y): ({},{})".format(endingPt[0], endingPt[1]))
+        if startingPt[1] > endingPt[1]:
             # piece is moving up
+            print("moving up")
             for y in range(1, abs(startingPt[1]-endingPt[1])):
-                if board[xAxis][startingPt[1]+y] != ".":
+                print("entered for loop")
+                print(abs(startingPt[1]-endingPt[1]))
+                print(y)
+                print("board at startingPt: {}".format(board[startingPt[1]][xAxis]))
+                print("board at startingPt-y: {}".format(board[startingPt[1]-y][xAxis]))
+                if board[startingPt[1]-y][xAxis] != ".":
                     print("the way is not clear")
                     isWayClear = False
-        elif startingPt[1] > endingPt[1]:
+                else:
+                    print("nothing flagged, way is clear")
+        elif startingPt[1] < endingPt[1]:
             # piece is moving down
+            print("moving down")
             for y in range(1, abs(startingPt[1]-endingPt[1])):
-                if board[xAxis][startingPt[1]-y] != ".":
+                print("entered for loop")
+                print(abs(startingPt[1]-endingPt[1]))
+                print(y)
+                print("board at startingPt: {}".format(board[startingPt[1]][xAxis]))
+                print("board at startingPt+y: {}".format(board[startingPt[1]+y][xAxis]))
+                if board[startingPt[1]+y][xAxis] != ".":
                     print("the way is not clear")
                     isWayClear = False
+                else:
+                    print("nothing flagged, way is clear")
         else:
             print("the piece isn't moving, something's wrong [1]")
     elif(startingPt[1] == endingPt[1]):
         # no y change, piece is moving on x-axis
+        print("no y change, x axis movement")
         yAxis = startingPt[1]
         if startingPt[0] < endingPt[0]:
             # piece is moving right
+            print("moving right")
             for x in range(abs(startingPt[0]-endingPt[0])):
-                if board[startingPt[0]+x][yAxis] != ".":
+                if board[yAxis][startingPt[0]+x] != ".":
                     print("the way is not clear")
                     isWayClear = False
         elif startingPt[0] > endingPt[0]:
             # piece is moving left
+            print("moving left")
             for x in range(abs(startingPt[0]-endingPt[0])):
-                if board[startingPt[0]-x][yAxis] != ".":
+                if board[yAxis][startingPt[0]-x] != ".":
                     print("the way is not clear")
                     isWayClear = False
         else:
@@ -94,6 +116,8 @@ def isMoveValid(startingPt, endingPt):
     moveValid = False
     # Identify piece type
     print("identify piece")
+
+    # BOARD[y][x]
     if (ord(board[startingPt[1]][startingPt[0]]) == 9823) or (ord(board[startingPt[1]][startingPt[0]]) == 9817):
         # It's a pawn
         print("its a pawn")
@@ -211,60 +235,73 @@ while gameStatus != "STOP":
     # -- THE MAIN BODY OF THE CODE THAT RUNS OVER AND OVER --
     else:
         # Turn the user-inputted strings into arrays (start and end)
-        inputPtStart = startMove.split(" ")
-        inputPtEnd = endMove.split(" ")
-
-        startPt = []
-        endPt = []
-
-        # Convert user-inputted chess positions to numerical positions
-        startPt.append(convertLetterToNum(inputPtStart[0]))
-        startPt.append(int(inputPtStart[1]))
-        endPt.append(convertLetterToNum(inputPtEnd[0]))
-        endPt.append(int(inputPtEnd[1]))
-
-        # # Convert the elements in the start point array from strings to ints
-        # for i in inputPtStart:
-        #     startPt.append(int(i))
-        # Convert the elements in the end point array from strings to ints
-        # for p in inputPtEnd:
-        #     endPt.append(int(p))
-
-        pt1Valid = True
-        pt2Valid = True
-        # Checking to make sure the start point is within the accepted bounds
-        if min(startPt) < 1 or max(startPt) > 8:
-            print("\n Sorry! You inputted an invalid first point!\n Remember, 1-8 are the accepted values.")
-            pt1Valid = False
-        # Checking to make sure the end point is within the accepted bounds
-        if min(endPt) < 1 or max(endPt) > 8:
-            print("\n Sorry! You inputted an invalid second point!\n Remember, 1-8 are the accepted values.")
-            pt2Valid = False
-
-        # Continue if both points are valid
-        if pt1Valid and pt2Valid:
-            # Adjusting the value of the inputs from the 8-1 range of the chess board to the 0-7 range of the arrays
-            # print(startPt)
-            # print(endPt)
-            startPt[0] = startPt[0] - 1
-            startPt[1] = abs(startPt[1] - 8)
-            endPt[0] = endPt[0] - 1
-            endPt[1] = abs(endPt[1] - 8)
-            # print(startPt)
-            # print(ord(board[startPt[0]][startPt[0]]))
-            # print(endPt)
-
-            # This part actually "moves" the piece to the desired position
-            # Assign the end point value on the board with the starting point value of the board
-            #   (the piece moves to the end point)
-            if(isMoveValid(startPt, endPt)):
-                board[endPt[1]][endPt[0]] = board[startPt[1]][startPt[0]]
-            # Overwrite the starting point value of the board with a dot
-            #   (signifies that the starting point is now empty)
-                board[startPt[1]][startPt[-0]] = "."
-                print("Did I Error? ", didIError)
+        if endMove.upper() == "DELETE":
+            inputPtStart = startMove.split(" ")
+            startPt = []
+            startPt.append(convertLetterToNum(inputPtStart[0]))
+            startPt.append(int(inputPtStart[1]))
+            if min(startPt) < 1 or max(startPt) > 8:
+                print("\n Sorry! You inputted an invalid first point!\n Remember, 1-8 are the accepted values.")
             else:
-                print("Invalid Move! Learn the rules dude..")
+                startPt[0] = startPt[0] - 1  # x-axis
+                startPt[1] = abs(startPt[1] - 8)  # y-axis
+
+                board[startPt[1]][startPt[-0]] = "."
+        else:
+            inputPtStart = startMove.split(" ")
+            inputPtEnd = endMove.split(" ")
+
+            startPt = []
+            endPt = []
+
+            # Convert user-inputted chess positions to numerical positions
+            startPt.append(convertLetterToNum(inputPtStart[0]))
+            startPt.append(int(inputPtStart[1]))
+            endPt.append(convertLetterToNum(inputPtEnd[0]))
+            endPt.append(int(inputPtEnd[1]))
+
+            # # Convert the elements in the start point array from strings to ints
+            # for i in inputPtStart:
+            #     startPt.append(int(i))
+            # Convert the elements in the end point array from strings to ints
+            # for p in inputPtEnd:
+            #     endPt.append(int(p))
+
+            pt1Valid = True
+            pt2Valid = True
+            # Checking to make sure the start point is within the accepted bounds
+            if min(startPt) < 1 or max(startPt) > 8:
+                print("\n Sorry! You inputted an invalid first point!\n Remember, 1-8 are the accepted values.")
+                pt1Valid = False
+            # Checking to make sure the end point is within the accepted bounds
+            if min(endPt) < 1 or max(endPt) > 8:
+                print("\n Sorry! You inputted an invalid second point!\n Remember, 1-8 are the accepted values.")
+                pt2Valid = False
+
+            # Continue if both points are valid
+            if pt1Valid and pt2Valid:
+                # Adjusting the value of the inputs from the 8-1 range of the chess board to the 0-7 range of the arrays
+                print(startPt)
+                print(endPt)
+                startPt[0] = startPt[0] - 1 # x-axis
+                startPt[1] = abs(startPt[1] - 8) # y-axis
+                endPt[0] = endPt[0] - 1 # x-axis
+                endPt[1] = abs(endPt[1] - 8) #y-axis
+                print("final start pt: {}".format(startPt))
+                # print(ord(board[startPt[0]][startPt[0]]))
+                print("final end pt: {}".format(endPt))
+
+                # This part actually "moves" the piece to the desired position
+                # Assign the end point value on the board with the starting point value of the board
+                #   (the piece moves to the end point)
+                if(isMoveValid(startPt, endPt)):
+                    board[endPt[1]][endPt[0]] = board[startPt[1]][startPt[0]]
+                # Overwrite the starting point value of the board with a dot
+                #   (signifies that the starting point is now empty)
+                    board[startPt[1]][startPt[-0]] = "."
+                    print("Did I Error? ", didIError)
+                else:
+                    print("Invalid Move! Learn the rules dude..")
 
 
 
