@@ -198,11 +198,35 @@ def isMoveValid(startingPt, endingPt):
     # need to check for bishop
         # need to have bishop move check (can modify isClearDirect() for that)
     # need to check for knight
-        # need to have knight move check (new method)
+    elif (ord(board[startingPt[1]][startingPt[0]]) == 9816) or (ord(board[startingPt[1]][startingPt[0]]) == 9822):
+        print("its a knight")
+        if (9818 <= ord(board[startingPt[1]][startingPt[0]]) <= 9823) and not(9818 <= ord(board[endingPt[1]][endingPt[0]]) <= 9823):
+            print("its a white piece")
+            moveValid = True
+        elif (9812 <= ord(board[startingPt[1]][startingPt[0]]) <= 9817) and not(9812 <= ord(board[endingPt[1]][endingPt[0]]) <= 9817):
+            print("its a black piece")
+            moveValid = True
+        else:
+            print("you cant take your own piece")
+            moveValid = False
+
+        return moveValid
     # need to check for queen
         # need to have queen move check (the bishop modification should handle this)
     # need to check for king
-        # need to have king move check (can do within isMoveValid())
+    elif (ord(board[startingPt[1]][startingPt[0]]) == 9818) or (ord(board[startingPt[1]][startingPt[0]]) == 9812):
+        print("its a king")
+        if (9818 <= ord(board[startingPt[1]][startingPt[0]]) <= 9823) and not(9818 <= ord(board[endingPt[1]][endingPt[0]]) <= 9823):
+            print("its a white piece")
+            moveValid = True
+        elif (9812 <= ord(board[startingPt[1]][startingPt[0]]) <= 9817) and not(9812 <= ord(board[endingPt[1]][endingPt[0]]) <= 9817):
+            print("its a black piece")
+            moveValid = True
+        else:
+            print("you cant take your own piece")
+            moveValid = False
+
+        return moveValid
     else:
         didIError = True
         return False
