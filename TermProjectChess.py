@@ -48,6 +48,30 @@ def convertLetterToNum(letter):
     else:
         return 0
 
+
+def isWhite(startingPt):
+    if (9818 <= ord(board[startingPt[1]][startingPt[0]]) <= 9823):
+        print("white piece")
+        return True
+    else:
+        print("black piece")
+        return False
+
+
+def legalTake(startingPt, endingPt):
+    if (9818 <= ord(board[startingPt[1]][startingPt[0]]) <= 9823) and not (9818 <= ord(board[endingPt[1]][endingPt[0]]) <= 9823):
+        print("its a white piece")
+        moveValid = True
+    elif (9812 <= ord(board[startingPt[1]][startingPt[0]]) <= 9817) and not (9812 <= ord(board[endingPt[1]][endingPt[0]]) <= 9817):
+        print("its a black piece")
+        moveValid = True
+    else:
+        print("you cant take your own piece")
+        moveValid = False
+
+    return moveValid
+
+
 def isClearDirect(startingPt, endingPt):
     isWayClear = True
     # Need to find axis of movement
@@ -65,7 +89,7 @@ def isClearDirect(startingPt, endingPt):
                 print(abs(startingPt[1]-endingPt[1]))
                 print(y)
                 print("board at startingPt: {}".format(board[startingPt[1]][xAxis]))
-                print("board at startingPt-y: {}".format(board[startingPt[1]-y][xAxis]))
+                print("board at startingPt+y: {}".format(board[startingPt[1]-y][xAxis]))
                 if board[startingPt[1]-y][xAxis] != ".":
                     print("the way is not clear")
                     isWayClear = False
@@ -79,7 +103,7 @@ def isClearDirect(startingPt, endingPt):
                 print(abs(startingPt[1]-endingPt[1]))
                 print(y)
                 print("board at startingPt: {}".format(board[startingPt[1]][xAxis]))
-                print("board at startingPt+y: {}".format(board[startingPt[1]+y][xAxis]))
+                print("board at startingPt-y: {}".format(board[startingPt[1]+y][xAxis]))
                 if board[startingPt[1]+y][xAxis] != ".":
                     print("the way is not clear")
                     isWayClear = False
@@ -94,23 +118,71 @@ def isClearDirect(startingPt, endingPt):
         if startingPt[0] < endingPt[0]:
             # piece is moving right
             print("moving right")
-            for x in range(abs(startingPt[0]-endingPt[0])):
+            for x in range(1, abs(startingPt[0]-endingPt[0])):
+                print("entered for loop")
+                print(abs(startingPt[0]-endingPt[0]))
+                print(x)
+                print("board at startingPt: {}".format(board[yAxis][startingPt[0]]))
+                print("board at startingPt+x: {}".format(board[yAxis][startingPt[0]+x]))
                 if board[yAxis][startingPt[0]+x] != ".":
                     print("the way is not clear")
                     isWayClear = False
         elif startingPt[0] > endingPt[0]:
             # piece is moving left
             print("moving left")
-            for x in range(abs(startingPt[0]-endingPt[0])):
+            for x in range(1, abs(startingPt[0]-endingPt[0])):
+                print("entered for loop")
+                print(abs(startingPt[0]-endingPt[0]))
+                print(x)
+                print("board at startingPt: {}".format(board[yAxis][startingPt[0]]))
+                print("board at startingPt-x: {}".format(board[yAxis][startingPt[0]-x]))
                 if board[yAxis][startingPt[0]-x] != ".":
                     print("the way is not clear")
                     isWayClear = False
         else:
             print("the piece isn't moving, something's wrong [2]")
+    elif (startingPt[0] != endingPt[0]) and (startingPt[1] != endingPt[1]):
+        # changes in both axis, diagonal movement
+        print("diagonal move")
+        if startingPt[1] > endingPt[1]:
+            # moving up
+            print("up and to the", end=" ")
+            if startingPt[0] > endingPt[0]:
+                # moving left
+                print("left")
+                for m in range(1, abs(startingPt[0] - endingPt[0])):
+                    if board[startingPt[1]-m][startingPt[0]+m] != ".":
+                        print("the way is not clear")
+                        isWayClear = False
+            else:
+                # moving right
+                print("right")
+                for m in range(1, abs(startingPt[0] - endingPt[0])):
+                    if board[startingPt[1]-m][startingPt[0]+m] != ".":
+                        print("the way is not clear")
+                        isWayClear = False
+        else:
+            # moving down
+            print("down and to the", end=" ")
+            if startingPt[0] < endingPt[0]:
+                # moving left
+                print("left")
+                for m in range(1, abs(startingPt[0] - endingPt[0])):
+                    if board[startingPt[1]+m][startingPt[0]-m] != ".":
+                        print("the way is not clear")
+                        isWayClear = False
+            else:
+                # moving right
+                print("right")
+                for m in range(1, abs(startingPt[0] - endingPt[0])):
+                    if board[startingPt[1]+m][startingPt[0]+m] != ".":
+                        print("the way is not clear")
+                        isWayClear = False
     else:
         print("no x or y change found, something is wrong [3]")
 
     return isWayClear
+
 
 def isMoveValid(startingPt, endingPt):
     moveValid = False
@@ -123,23 +195,32 @@ def isMoveValid(startingPt, endingPt):
         print("its a pawn")
         if board[endingPt[1]][endingPt[0]] == "." and startingPt[0] == endingPt[0] and (startingPt[1] == 1 or startingPt[1] == 6) and abs(endingPt[1]-startingPt[1]) <= 2:
             # legal straight ahead move (double move is an option)
-            if abs(endingPt[1]-startingPt[1]) == 2:
-                print("double move")
-                # It is a double move
-                if isClearDirect(startingPt, endingPt):
-                    # The way is clear
-                    print("the way is clear")
-                    moveValid = True
+            print(endingPt[1]-startingPt[1])
+            if (isWhite(startingPt) and (endingPt[1]-startingPt[1] < 0)) or (not(isWhite(startingPt)) and (endingPt[1]-startingPt[1]) > 0):
+                if abs(endingPt[1]-startingPt[1]) == 2:
+                    print("double move")
+                    # It is a double move
+                    if isClearDirect(startingPt, endingPt):
+                        # The way is clear
+                        print("the way is clear")
+                        moveValid = True
+                    else:
+                        print("not clear, cant double move")
+                        moveValid = False
                 else:
-                    print("not clear, cant double move")
-                    moveValid = False
+                    print("legal straight ahead move of length {}".format(abs(endingPt[1]-startingPt[1])))
+                    moveValid = True
             else:
-                print("legal straight ahead move of length {}".format(abs(endingPt[1]-startingPt[1])))
-                moveValid = True
+                moveValid = False
+                print("Pawns don't move backwards genius")
         elif board[endingPt[1]][endingPt[0]] == "." and startingPt[0] == endingPt[0] and abs(endingPt[1]-startingPt[1]) <= 1:
-            # legal straight ahead move
-            print("legal straight ahead move")
-            moveValid = True
+            if (isWhite(startingPt) and (endingPt[1] - startingPt[1] < 0)) or (not (isWhite(startingPt)) and (endingPt[1] - startingPt[1]) > 0):
+                # legal straight ahead move
+                print("legal straight ahead move")
+                moveValid = True
+            else:
+                moveValid = False
+                print("pawns don't move backwards genius")
         elif (startingPt[0] != endingPt[0]) and (board[endingPt[1]][endingPt[0]] != "."):
             print("diagonal take")
             # diagonal take
@@ -175,7 +256,7 @@ def isMoveValid(startingPt, endingPt):
             # straight ahead y move
             if abs(startingPt[1]-endingPt[1]) > 1:
                 # The move is more than 1 square
-                if isClearDirect(startingPt, endingPt):
+                if isClearDirect(startingPt, endingPt) and legalTake(startingPt, endingPt):
                     moveValid = True
                 else:
                     moveValid = False
@@ -185,7 +266,7 @@ def isMoveValid(startingPt, endingPt):
             # straight ahead x move
             if abs(startingPt[0] - endingPt[0]) > 1:
                 # The move is more than 1 square
-                if isClearDirect(startingPt, endingPt):
+                if isClearDirect(startingPt, endingPt) and legalTake(startingPt, endingPt):
                     moveValid = True
                 else:
                     moveValid = False
@@ -195,41 +276,27 @@ def isMoveValid(startingPt, endingPt):
             moveValid = False
 
         return moveValid
-    # need to check for bishop
-        # need to have bishop move check (can modify isClearDirect() for that)
-    # need to check for knight
+    elif (ord(board[startingPt[1]][startingPt[0]]) == 9821) or (ord(board[startingPt[1]][startingPt[0]]) == 9815):
+        print("its a bishop")
+        return isClearDirect(startingPt, endingPt) and legalTake(startingPt, endingPt)
     elif (ord(board[startingPt[1]][startingPt[0]]) == 9816) or (ord(board[startingPt[1]][startingPt[0]]) == 9822):
         print("its a knight")
-        if (9818 <= ord(board[startingPt[1]][startingPt[0]]) <= 9823) and not(9818 <= ord(board[endingPt[1]][endingPt[0]]) <= 9823):
-            print("its a white piece")
-            moveValid = True
-        elif (9812 <= ord(board[startingPt[1]][startingPt[0]]) <= 9817) and not(9812 <= ord(board[endingPt[1]][endingPt[0]]) <= 9817):
-            print("its a black piece")
-            moveValid = True
+        if ((abs(startingPt[1]-endingPt[1]) == 2) and (abs(startingPt[0]-endingPt[0]) == 1)) or ((abs(startingPt[1]-endingPt[1]) == 1) and (abs(startingPt[0]-endingPt[0]) == 2)):
+            return legalTake(startingPt, endingPt)
         else:
-            print("you cant take your own piece")
-            moveValid = False
-
-        return moveValid
+            print("illegal knight move")
+            return False
     # need to check for queen
-        # need to have queen move check (the bishop modification should handle this)
-    # need to check for king
+    elif (ord(board[startingPt[1]][startingPt[0]]) == 9819) or (ord(board[startingPt[1]][startingPt[0]]) == 9813):
+        print("its a queen")
+        return isClearDirect(startingPt, endingPt) and legalTake(startingPt, endingPt)
     elif (ord(board[startingPt[1]][startingPt[0]]) == 9818) or (ord(board[startingPt[1]][startingPt[0]]) == 9812):
         print("its a king")
-        if (9818 <= ord(board[startingPt[1]][startingPt[0]]) <= 9823) and not(9818 <= ord(board[endingPt[1]][endingPt[0]]) <= 9823):
-            print("its a white piece")
-            moveValid = True
-        elif (9812 <= ord(board[startingPt[1]][startingPt[0]]) <= 9817) and not(9812 <= ord(board[endingPt[1]][endingPt[0]]) <= 9817):
-            print("its a black piece")
-            moveValid = True
-        else:
-            print("you cant take your own piece")
-            moveValid = False
-
-        return moveValid
+        return legalTake(startingPt, endingPt)
     else:
         didIError = True
         return False
+
 
 # The loop inside which the game runs -- runs the loop until the gameStatus is changed from "GO" to "STOP"
 while gameStatus != "STOP":
